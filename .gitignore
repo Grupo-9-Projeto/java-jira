@@ -1,0 +1,43 @@
+# Arquivos compilados do Java
+*.class
+
+# Diretórios de saída da compilação e empacotamento
+/target/
+/bin/
+/build/
+/out/
+
+# Arquivos e diretórios específicos das IDEs
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+*.ptp
+.springBeans
+
+# VS Code
+.vscode/
+
+# Configurações de sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários e logs
+*.log
+/logs/
+
+# Arquivos de properties que contêm credenciais e senhas (MUITO IMPORTANTE)
+# Recomenda-se não subir o arquivo application.properties com as senhas reais.
+# Crie um application-example.properties genérico para o Git e ignore o arquivo real:
+/src/main/resources/application.properties
+/src/main/resources/application-dev.properties
+
+# Arquivos CSV temporários que sua aplicação pode gerar ou ler
+*.csv
