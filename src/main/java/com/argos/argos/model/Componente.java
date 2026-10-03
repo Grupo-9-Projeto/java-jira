@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Componente {
-    private Long idComponente;
+    private Integer idComponente;
     private String nomeIdentificador;
     private Double limiarAviso;
     private Double limiarCritico;

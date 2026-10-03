@@ -17,18 +17,15 @@ public class MonitoramentoService {
     }
 
     @Scheduled(fixedRate = 10000)
-    public void verificarComponentes() {
+    public void verificarComponentes(Integer idComponente, Double uso) {
         System.out.println("Iniciando varredura de hardware...");
 
-        Long idComponenteMonitorado = 1L;
-        Double usoAtual = 92.0;
+        Componente limiteBanco = repository.buscarLimitesPorId(idComponente);
 
-        Componente limiteBanco = repository.buscarLimitesPorId(idComponenteMonitorado);
+        if (uso > limiteBanco.getLimiarCritico()) {
+            System.out.println("ALERTA CRÍTICO: " + limiteBanco.getNomeIdentificador() + " passou do limite! Uso atual: " + uso);
 
-        if (usoAtual > limiteBanco.getLimiarCritico()) {
-            System.out.println("ALERTA CRÍTICO: " + limiteBanco.getNomeIdentificador() + " passou do limite! Uso atual: " + usoAtual);
-
-            jira.criarChamado(limiteBanco.getNomeIdentificador(), usoAtual);
+            jira.criarChamado(limiteBanco.getNomeIdentificador(), uso);
         } else {
             System.out.println("Componente " + limiteBanco.getNomeIdentificador() + " estável.");
         }

@@ -13,13 +13,13 @@ public class ComponenteRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Componente buscarLimitesPorId(Long idComponente) {
+    public Componente buscarLimitesPorId(Integer idComponente) {
         String sql = "SELECT id_componente, nome_identificador, limiar_aviso, limiar_critico " +
                 "FROM componente WHERE id_componente = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             return new Componente(
-                    rs.getLong("id_componente"),
+                    rs.getInt("id_componente"),
                     rs.getString("nome_identificador"),
                     rs.getDouble("limiar_aviso"),
                     rs.getDouble("limiar_critico")
