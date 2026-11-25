@@ -81,6 +81,13 @@ public class MonitoramentoService {
                 System.out.println("ALERTA CRÍTICO: " + c.getNomeIdentificador() + " passou do limite! Uso atual: "
                         + valorExibido + " " + unidadeExibida);
 
+                if (alertaRepository.possuiChamadoEmAberto(c.getIdComponente())) {
+                    System.out.println("Chamado já existe no Jira ('A fazer' ou 'Em andamento') para "
+                            + c.getNomeIdentificador() + ". Abertura de novo ticket ignorada.");
+                    ultimoAlerta.put(chaveCooldown, agora);
+                    continue;
+                }
+
                 String jiraKey = jira.criarChamado(c.getNomeIdentificador(), valorExibido, unidadeExibida, mac, quando);
                 if (jiraKey != null) {
                     alertaRepository.salvarAlerta(
@@ -91,7 +98,7 @@ public class MonitoramentoService {
                             descricao,
                             quando,
                             jiraKey,
-                            "Tarefas pendentes"
+                            "A fazer"
                     );
                     ultimoAlerta.put(chaveCooldown, agora);
                 }

@@ -17,11 +17,24 @@ public class AlertaRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public boolean possuiChamadoEmAberto(Integer fkComponente) {
+        String sql = """
+                SELECT COUNT(*)
+                FROM alerta
+                WHERE fkComponente = ?
+                  AND jira_key IS NOT NULL
+                  AND LOWER(TRIM(status_jira)) IN ('a fazer', 'em andamento')
+                """;
+
+        Integer total = jdbcTemplate.queryForObject(sql, Integer.class, fkComponente);
+        return total != null && total > 0;
+    }
+
     public void salvarAlerta(Integer fkComponente, String nivelAlerta, Double valorRegistrado, String unidadeMedida, String descricao, String quandoColetado, String jiraKey, String statusJira) {
         Timestamp registradoEm = parseTimestamp(quandoColetado);
 
         String sql = """
-                INSERT INTO Alerta (
+                INSERT IGNORE INTO alerta (
                     registrado_em, nivel_alerta, valor_registrado, unidade_medida,
                     descricao, fkComponente, jira_key, status_jira
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -41,7 +54,7 @@ public class AlertaRepository {
     }
 
     public Integer atualizarStatusPorJiraKey(String jiraKey, String statusJira) {
-        String sql = "UPDATE Alerta SET status_jira = ? WHERE jira_key = ?";
+        String sql = "UPDATE alerta SET status_jira = ? WHERE jira_key = ?";
         return jdbcTemplate.update(sql, statusJira, jiraKey);
     }
 
